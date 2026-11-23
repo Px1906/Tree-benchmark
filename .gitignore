@@ -1,0 +1,36 @@
+# Binários de compilação
+main
+*.o
+
+# Ambiente virtual do Python
+venv/
+.venv/
+__pycache__/
+
+# Resultados gerados pelo benchmark e pela análise
+resultados/
+saida/
+
+# Configurações de editor
+.vscode/
+
+# Metadados do Windows (arquivos baixados no WSL)
+*:Zone.Identifier
+
+# Arquivos auxiliares do LaTeX
+docs/*.aux
+docs/*.bbl
+docs/*.blg
+docs/*.brf
+docs/*.fdb_latexmk
+docs/*.fls
+docs/*.idx
+docs/*.ilg
+docs/*.ind
+docs/*.lof
+docs/*.log
+docs/*.lot
+docs/*.loq
+docs/*.out
+docs/*.toc
+docs/*.synctex.gz
