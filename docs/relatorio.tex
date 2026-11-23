@@ -1,0 +1,343 @@
+% Relatório técnico-científico (ABNT NBR 10719) com abnTeX2.
+% Compilar a partir de docs/:  latexmk -pdf relatorio.tex
+% A declaração de uso de IA (recursos/declaracao_ia.tex e recursos/registro_ia.tex)
+% é gerada a partir de registro_ia.toml por:  python3 docs/gerar_declaracao_ia.py
+
+\documentclass[
+    12pt,
+    oneside,
+    a4paper,
+    openany,
+    chapter=TITLE,
+    english,
+    brazil
+]{abntex2}
+
+% ─── Pacotes ────────────────────────────────────────
+\usepackage{cmap}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{indentfirst}
+\usepackage{xcolor}
+\usepackage{graphicx}
+% protrusion=false: sem pontuação avançando na margem, para respeitar as margens da NBR 14724 à risca
+\usepackage[protrusion=false]{microtype}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{amsmath}
+
+% Ambiente "quadro" (informação textual com bordas fechadas, NBR 14724), definido
+% pelo \newfloat da classe memoir antes de carregar o float, para herdar o
+% estilo de legenda do abnTeX2 (título acima, separado por travessão)
+% Os quadros entram na Lista de ilustrações (lof), junto com as figuras
+\newfloat[chapter]{quadro}{lof}{Quadro}
+\renewcommand{\thequadro}{\arabic{quadro}}
+\providecommand{\quadroautorefname}{Quadro}
+% O babel brazil usa "seção" minúsculo no \autoref; maiúsculo como Capítulo, Tabela etc.
+\addto\captionsbrazil{%
+    \renewcommand{\sectionautorefname}{Seção}%
+    \renewcommand{\subsectionautorefname}{Seção}%
+}
+\newlistentry{quadro}{lof}{0}
+\renewcommand{\cftquadroname}{Quadro\space}
+\renewcommand*{\cftquadroaftersnum}{\hfill\textendash\hfill}
+\setlength{\cftquadroindent}{\cftfigureindent}
+\setlength{\cftquadronumwidth}{\cftfigurenumwidth}
+
+\usepackage{float}
+\usepackage{listings}
+% Citações conforme a NBR 10520:2023: sobrenome só com inicial maiúscula também
+% entre parênteses, ex.: (Cormen et al., 2012), e "et al." em itálico
+% (a opção nbr10520-2023 está declarada no início do referencias.bib)
+\usepackage[alf, nbr10520-2023, abnt-etal-text=it]{abntex2cite}
+% NBR 6023:2018: URL sem os sinais < >
+\def\UrlLeft{}
+\def\UrlRight{}
+% Autor-entidade: maiúsculas e minúsculas na citação, maiúsculas nas referências
+% (o \emreferenciastrue fica logo antes do \bibliography; o comando é robusto
+% para chegar sem expandir ao .aux e só decidir a caixa na hora de imprimir)
+\newif\ifemreferencias
+\DeclareRobustCommand{\entidade}[1]{\ifemreferencias\MakeUppercase{#1}\else#1\fi}
+
+\sisetup{
+    output-decimal-marker = {,},
+    group-digits          = integer,
+    group-separator       = {.},
+    group-minimum-digits  = 4,
+    exponent-product      = \times,
+    table-number-alignment = center,
+}
+
+\lstset{
+    basicstyle   = \ttfamily\footnotesize,
+    frame        = single,
+    breaklines   = true,
+    columns      = fullflexible,
+    keepspaces   = true,
+    showstringspaces = false,
+    % a moldura é desenhada fora da caixa do código; recua o código para ela caber na margem
+    xleftmargin  = \dimexpr\fboxsep+\fboxrule\relax,
+    xrightmargin = \dimexpr\fboxsep+\fboxrule\relax,
+    inputencoding = utf8,
+    extendedchars = true,
+    literate = {á}{{\'a}}1 {ã}{{\~a}}1 {ç}{{\c c}}1 {é}{{\'e}}1 {ê}{{\^e}}1
+               {í}{{\'i}}1 {ó}{{\'o}}1 {õ}{{\~o}}1 {ú}{{\'u}}1 {×}{{$\times$}}1,
+}
+
+% Cabeçalho de tabela em mais de uma linha, alinhado pela base: \cabecalho{Desvio\\padrão}
+\newcommand{\cabecalho}[1]{\begin{tabular}[b]{@{}c@{}}#1\end{tabular}}
+
+% Marca itens que ainda precisam ser completados antes da entrega
+\newcommand{\pendente}[1]{\textcolor{red}{\textbf{[PENDENTE: #1]}}}
+
+% Texto literal de prompts e saídas no apêndice de uso de IA (gerado por
+% gerar_declaracao_ia.py, já escapado): recuado, em fonte menor e sem recuo de parágrafo
+\newenvironment{registroia}
+    {\begin{quote}\small\setlength{\parindent}{0pt}\raggedright}
+    {\end{quote}}
+
+% ─── Dados do trabalho ──────────────────────────────
+\titulo{Análise empírica das árvores AVL e Rubro-Negra: tempos de construção e busca, altura, rotações e regressão}
+\autor{Sérgio de Paiva Ximenes Filho}
+\local{Fortaleza}
+\data{2026}
+% PENDENTE: confirmar orientador, disciplina e atividade
+\orientador{Prof. Bruno Lopes}
+\instituicao{%
+    Universidade de Fortaleza -- UNIFOR
+    \par
+    Centro de Ciências Tecnológicas
+    \par
+    Bacharelado em Ciência da Computação}
+\tipotrabalho{Relatório técnico}
+\preambulo{Relatório da atividade prática de implementação apresentado à disciplina T198 -- Construção e Análise de Algoritmos, do curso de Bacharelado em Ciência da Computação da Universidade de Fortaleza.}
+
+\usepackage{hyperref}
+\hypersetup{
+    pdftitle    = {Análise empírica das árvores AVL e Rubro-Negra},
+    pdfsubject  = {Relatório técnico -- T198 Construção e Análise de Algoritmos},
+    colorlinks  = true,
+    linkcolor   = black,
+    citecolor   = black,
+    urlcolor    = black,
+    bookmarksdepth = 4,
+}
+
+% NBR 14724: margens de 3 cm (sup.) e 2 cm (inf.). O \checkandfixthelayout padrão
+% arredonda a altura do texto para um número inteiro de linhas, para cima, e a
+% margem inferior caía para 1,82 cm; [fixed] mantém a altura exata
+\setulmarginsandblock{3cm}{2cm}{*}
+\checkandfixthelayout[fixed]
+
+% NBR 14724: só o número da página, no canto superior direito
+\makeevenhead{abntheadings}{}{}{\ABNTEXfontereduzida\thepage}
+\makeoddhead{abntheadings}{}{}{\ABNTEXfontereduzida\thepage}
+\makeheadrule{abntheadings}{\textwidth}{0pt}
+
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{0.2cm}
+% Folga extra de espaçamento, usada só quando uma linha não cabe na margem
+% (ex.: caminhos em \texttt, que não esticam)
+\setlength{\emergencystretch}{2em}
+
+% ═══════════════════════════════════════════════════
+\begin{document}
+\selectlanguage{brazil}
+\frenchspacing
+
+% ─── PRÉ-TEXTUAIS ──────────────────────────────────
+\pretextual
+
+\imprimircapa
+\imprimirfolhaderosto
+
+\setlength{\absparsep}{18pt}
+\begin{resumo}
+\pendente{resumo: objetivo, método (árvores, cenários, tamanhos, repetições, medições), principais resultados numéricos e conclusão, em um único parágrafo}
+
+\textbf{Palavras-chave}: árvores binárias de busca balanceadas; árvore AVL; árvore rubro-negra; análise empírica; regressão.
+\end{resumo}
+
+\pdfbookmark[0]{\listfigurename}{lof}
+\listoffigures*
+\cleardoublepage
+
+\pdfbookmark[0]{\listtablename}{lot}
+\listoftables*
+\cleardoublepage
+
+\pdfbookmark[0]{\contentsname}{toc}
+\tableofcontents*
+\cleardoublepage
+
+% ─── TEXTUAIS ──────────────────────────────────────
+\textual
+
+% ═══════════════════════════════════════════════════
+\chapter{Introdução}
+\label{cap:introducao}
+
+\pendente{contexto: árvores binárias de busca e o problema da degeneração; balanceamento como garantia de altura $O(\log n)$; AVL \cite{adelson1962} e Rubro-Negra \cite{bayer1972,guibas1978,cormen2012}}
+
+\pendente{objetivo e hipóteses esperadas pela teoria (altura, rotações, tempos de construção e busca nos três cenários)}
+
+O \autoref{cap:fundamentacao} resume a teoria das duas árvores. O \autoref{cap:metodologia} descreve o ambiente e o procedimento experimental. O \autoref{cap:resultados} apresenta os dados coletados, sem interpretação. O \autoref{cap:analise} interpreta os resultados à luz da teoria, e o \autoref{cap:conclusao} sintetiza as conclusões.
+
+% ═══════════════════════════════════════════════════
+\chapter{Fundamentação teórica}
+\label{cap:fundamentacao}
+
+\section{Árvore AVL}
+\label{sec:avl}
+
+\pendente{definição, fator de balanceamento, rotações simples e duplas, limite de altura $h < 1{,}44 \log_2(n + 2)$}
+
+\section{Árvore Rubro-Negra}
+\label{sec:rb}
+
+\pendente{as cinco propriedades, altura negra, limite $h \le 2 \log_2(n + 1)$, número de rotações por inserção e remoção}
+
+% ═══════════════════════════════════════════════════
+\chapter{Metodologia}
+\label{cap:metodologia}
+
+Este capítulo descreve o ambiente de execução, a implementação, a geração das entradas, a coleta dos dados e os métodos estatísticos empregados, com o detalhamento necessário para que o experimento possa ser reproduzido. O \autoref{apendice:reproducao} lista os comandos utilizados.
+
+\section{Ambiente de execução}
+
+\pendente{confirmar se o ambiente é o mesmo do Sorting-benchmark e atualizar o quadro}
+
+\begin{quadro}[htbp]
+    \caption{Especificações do ambiente de execução}
+    \label{quadro:ambiente}
+    \centering
+    \small
+    \begin{tabular}{|l|p{9.5cm}|}
+        \hline
+        \textbf{Item} & \textbf{Especificação} \\ \hline
+        Processador & Intel Core i5-12400 (12.ª geração), frequência base de 2,5 GHz, 6 núcleos e 12 \textit{threads}, cache L2 de 7,5 MiB e L3 de 18 MiB \\ \hline
+        Memória RAM & 32 GB instalados (31,8 GB utilizáveis pelo Windows), dos quais 15,5 GiB disponíveis para a máquina virtual do WSL 2 \\ \hline
+        Sistema hospedeiro & Microsoft Windows 11 (versão 10.0.26200) \\ \hline
+        Sistema de execução & Ubuntu 26.04.1 LTS no Windows Subsystem for Linux 2 (WSL 2), núcleo Linux 6.18.33.2-microsoft-standard-WSL2 \\ \hline
+        Compilador & GCC 15.2.0 \\ \hline
+        Flags de compilação & \texttt{-Wall -Wextra -O2} \\ \hline
+        Análise de dados & Python 3.14.4 com NumPy 2.5.3, pandas 3.0.6, SciPy 1.18.1 e Matplotlib 3.11.2 \\ \hline
+    \end{tabular}
+    \fonte{Elaborado pelo autor (2026).}
+\end{quadro}
+
+O programa foi compilado pelo \texttt{Makefile} do projeto com o comando \texttt{gcc -Wall -Wextra -O2 main.c avl.c rb.c -o main}. \pendente{justificativa do \texttt{-O2} \cite{gcc2025} e condições de uso da máquina durante as execuções}
+
+\section{Implementação das árvores}
+
+\pendente{\texttt{avl.c} e \texttt{rb.c}: estrutura dos nós, inserção, busca, remoção, cálculo da altura (em arestas), contagem de rotações (dupla conta como duas) e sentinela \texttt{nil} da Rubro-Negra \cite{cormen2012}}
+
+\section{Validação}
+\label{sec:validacao}
+
+\pendente{o que \texttt{./main validar} verifica em cada árvore e o teste negativo}
+
+\section{Medição}
+
+\pendente{medição em lote com \texttt{clock\_gettime(CLOCK\_MONOTONIC)} \cite{manclock}; o que fica dentro e fora do intervalo medido; construção, $n$ buscas e remoção}
+
+\section{Geração das entradas}
+\label{sec:entradas}
+
+\pendente{cenários crescente, decrescente e aleatório (Fisher-Yates); \texttt{srand(repeticao)}; mesmas chaves, buscas e ordem de remoção para as duas árvores}
+
+\section{Coleta e organização dos dados}
+
+\pendente{tamanhos de \num{1000} a \num{1000000}, 50 repetições, ordem do laço, datas da coleta, formato de \texttt{resultados/<arvore>/<cenario>/<n>.csv}}
+
+\section{Estatística descritiva e regressão}
+\label{sec:estatistica}
+
+\pendente{média, desvio padrão, IC de 95\,\% com $t$ de Student \cite{montgomery2016}, teste de Welch \cite{welch1947}; regressões do tempo ($n \log_2 n$, $n$, $n^2$) e da altura ($\log_2 n$) com pandas, NumPy, SciPy e Matplotlib \cite{mckinney2010,harris2020,virtanen2020,hunter2007}}
+
+\section{Uso de inteligência artificial}
+\label{sec:uso-ia}
+
+\IfFileExists{recursos/declaracao_ia.tex}
+    {\input{recursos/declaracao_ia.tex}}
+    {\pendente{rodar \texttt{python3 docs/gerar\_declaracao\_ia.py}}}
+
+% ═══════════════════════════════════════════════════
+\chapter{Resultados}
+\label{cap:resultados}
+
+\pendente{tabelas de estatísticas e gráficos comparativos de tempo de construção, tempo de busca, altura e rotações (e remoção, bônus) por cenário}
+
+% ═══════════════════════════════════════════════════
+\chapter{Análise}
+\label{cap:analise}
+
+\section{Altura frente aos limites teóricos}
+\pendente{}
+
+\section{Rotações}
+\pendente{}
+
+\section{Tempos de construção e busca}
+\pendente{}
+
+\section{Diferenças entre os cenários}
+\pendente{}
+
+\section{Variabilidade e intervalos de confiança}
+\pendente{}
+
+\section{Regressão}
+\pendente{}
+
+% ═══════════════════════════════════════════════════
+\chapter{Conclusão}
+\label{cap:conclusao}
+
+\pendente{síntese dos resultados, limitações e trabalhos futuros}
+
+% ─── PÓS-TEXTUAIS ──────────────────────────────────
+\postextual
+
+% Entradas citadas só nos apêndices gerados ou ainda não citadas no texto
+\nocite{knuth1998,johnson2002,mcgeoch2012,anthropic2026}
+
+\emreferenciastrue
+\bibliography{referencias}
+\emreferenciasfalse
+
+\begin{apendicesenv}
+\partapendices
+
+\chapter{Reprodução do experimento}
+\label{apendice:reproducao}
+
+Os comandos a seguir, executados na raiz do projeto, reproduzem o ciclo completo de compilação, validação, execução, análise e geração deste relatório.
+
+\begin{lstlisting}[language=bash]
+# 1. Compilar, validar e executar o benchmark (grava os CSVs em resultados/)
+make
+./main validar
+./main
+
+# 2. Preparar o ambiente Python e gerar tabelas e figuras
+python3 -m venv venv
+venv/bin/pip install -r requirements.txt
+venv/bin/python analise.py                # saídas em saida/
+
+# 3. Gerar a declaração de uso de IA e compilar o relatório
+python3 docs/gerar_declaracao_ia.py       # saídas em docs/recursos/
+cd docs && latexmk -pdf relatorio.tex
+\end{lstlisting}
+
+\chapter{Registro do uso de inteligência artificial}
+\label{apendice:registro-ia}
+
+\IfFileExists{recursos/registro_ia.tex}
+    {\input{recursos/registro_ia.tex}}
+    {\pendente{rodar \texttt{python3 docs/gerar\_declaracao\_ia.py}}}
+
+\end{apendicesenv}
+
+\end{document}

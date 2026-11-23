@@ -1,0 +1,75 @@
+# Registro de uso de inteligência artificial no projeto Tree-benchmark.
+#
+# TODA prompt direcionada ao desenvolvimento do projeto (código, análise,
+# relatório, revisão de texto etc.) deve ser registrada aqui, na ordem em que
+# foi enviada. A declaração de uso de IA do relatório é gerada a partir deste
+# arquivo por:   python3 docs/gerar_declaracao_ia.py
+# (gera docs/recursos/declaracao_ia.tex e docs/recursos/registro_ia.tex)
+#
+# Estrutura
+#   [[sessao]]              uma por conversa/sessão com a ferramenta
+#     ferramenta, modelo, modelo_id, empresa, interface, configuracoes,
+#     instrucoes_sistema    metadados que valem para a sessão inteira
+#   [[sessao.interacao]]    uma por prompt enviada dentro da sessão
+#     data                  AAAA-MM-DD
+#     prompt                texto literal e completo (incluindo trechos colados)
+#     saida                 resposta completa, ou a parte usada / resumo fiel do que foi produzido
+#     finalidade            código, análise de dados, revisão de linguagem etc.
+#     verificacao           o que o autor checou, corrigiu ou descartou
+#     arquivos, commits     (opcionais) o que a interação criou ou alterou
+#
+# Use '''...''' para textos de várias linhas (string literal: nada é escapado).
+# Qualquer campo que comece com "PENDENTE" aparece em vermelho no relatório,
+# para não ser esquecido antes da entrega.
+
+# ─────────────────────────────────────────────────────────────────────────────
+[[sessao]]
+id = "S1"
+ferramenta = "Claude Code"
+modelo = "Claude Opus 5.5"
+modelo_id = "claude-opus-5-5"
+empresa = "Anthropic"
+interface = "PENDENTE: informar a interface usada (ex.: claude.ai/code na web, Claude Code no terminal ou no VS Code) e a versão"
+configuracoes = "PENDENTE: busca na web, memória/histórico de chats, modo de permissões, plugins"
+instrucoes_sistema = "PENDENTE: instruções de projeto ou personalizadas que estavam ativas, se houver (o prompt de sistema padrão da ferramenta não é reproduzido)"
+
+[[sessao.interacao]]
+data = "2026-11-23"
+finalidade = "Geração do código: estrutura inicial do repositório (árvores AVL e Rubro-Negra em C, benchmark, validação e análise em Python)"
+prompt = '''PENDENTE: colar aqui a prompt literal que gerou o repositório (a transcrição dessa sessão não está nesta máquina).'''
+saida = '''Commit fcec72d ("Estrutura inicial: AVL e Rubro-Negra com benchmark e análise"), com os arquivos main.c, avl.c, avl.h, rb.c, rb.h, analise.py, Makefile, requirements.txt, README.md e .gitignore. O código completo gerado está no histórico do repositório.'''
+verificacao = '''PENDENTE: descrever o que foi conferido (ex.: leitura do código, execução de ./main validar, comparação com o CLRS), corrigido ou descartado.'''
+arquivos = ["main.c", "avl.c", "avl.h", "rb.c", "rb.h", "analise.py", "Makefile", "requirements.txt", "README.md", ".gitignore"]
+commits = ["fcec72d"]
+
+# ─────────────────────────────────────────────────────────────────────────────
+[[sessao]]
+id = "S2"
+ferramenta = "Claude Code"
+modelo = "Claude Opus 5.5"
+modelo_id = "claude-opus-5-5"
+empresa = "Anthropic"
+interface = "Claude Code 2.1.330, extensão do Visual Studio Code, executando no Ubuntu 26.04.1 LTS (WSL 2)"
+configuracoes = "modo de permissões automático; ferramenta de busca na web disponível, mas não usada; memória persistente do Claude Code ativada (vazia no início da sessão); plugin academico-br habilitado; temperatura e demais parâmetros de amostragem no padrão da ferramenta (não configuráveis pelo usuário)"
+instrucoes_sistema = "prompt de sistema padrão do Claude Code (não reproduzido). Nenhum CLAUDE.md no projeto no início da sessão; o CLAUDE.md criado nesta sessão passa a valer para as seguintes."
+
+[[sessao.interacao]]
+data = "2026-11-23"
+finalidade = "Estrutura do relatório em LaTeX (abnTeX2) e criação deste registro de uso de IA"
+prompt = '''Na Tree-benchmark, crie a pasta docs, vamos usar o latex da mesma forma que foi usado no Sorting Benchmark, nisso, adicione tambem um arquivo para guardar todas as prompts e metados afim de gerar uma declaração de uso de IA no relatório usando esse modelo aqui.
+
+1. O que registrar a cada uso
+Item	Exemplo
+Ferramenta e versão exata	Claude Sonnet 5.5 (claude-sonnet-5-5)
+Empresa e interface	Anthropic, claude.ai (web) ou API
+Data(s) de uso	23/11/2026
+Configurações relevantes	Busca na web ligada ou desligada, memória ou histórico de chats ligado, parâmetros (temperatura) se usou a API
+Prompt literal	Texto completo, incluindo instruções de sistema ou de projeto, se houver
+Saída	Resposta completa, ou a parte usada
+Finalidade	Revisão de linguagem, síntese de literatura, código, análise de dados etc.
+Verificação humana	O que você checou, corrigiu ou descartou
+
+Toda e qualquer prompt direcionada para o desenvolvimento do projeto precisa ser registrada a partir de agora, isso inclui a prompt que gerou o repositório.'''
+saida = '''Criou a pasta docs/ com: relatorio.tex (esqueleto do relatório técnico em abnTeX2, com o mesmo preâmbulo, formatação ABNT e organização em capítulos do relatório do Sorting-benchmark, conteúdo marcado como pendente); referencias.bib e abntex2-alf.bst (copiados e adaptados do Sorting-benchmark, com referências sobre AVL e Rubro-Negra); registro_ia.toml (este registro); gerar_declaracao_ia.py (gera, a partir do registro, a seção de declaração de uso de IA e o apêndice com as prompts literais). Criou também o CLAUDE.md na raiz, instruindo as próximas sessões a registrarem cada prompt aqui.'''
+verificacao = '''PENDENTE: descrever o que foi conferido, corrigido ou descartado.'''
+arquivos = ["docs/relatorio.tex", "docs/referencias.bib", "docs/abntex2-alf.bst", "docs/registro_ia.toml", "docs/gerar_declaracao_ia.py", "CLAUDE.md"]

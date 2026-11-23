@@ -1,0 +1,56 @@
+% Gerado por docs/gerar_declaracao_ia.py a partir de docs/registro_ia.toml. Não edite à mão.
+Este apêndice reproduz, na ordem em que foram enviadas, todas as prompts direcionadas ao desenvolvimento do projeto, com a saída da ferramenta (completa ou a parte usada), a finalidade e a verificação feita pelo autor. O registro original, em formato legível por máquina, está no arquivo \texttt{docs/registro\_ia.toml} do repositório.
+
+\section*{Interação I1 (sessão S1, 23/11/2026)}
+\addcontentsline{toc}{section}{Interação I1}
+{\raggedright
+\begin{description}
+    \item[Ferramenta:] Claude Code, Claude Opus 5.5 (\texttt{claude-opus-5-5}), Anthropic
+    \item[Interface:] \pendente{informar a interface usada (ex.: claude.ai/code na web, Claude Code no terminal ou no VS Code) e a versão}
+    \item[Finalidade:] Geração do código: estrutura inicial do repositório (árvores AVL e Rubro-Negra em C, benchmark, validação e análise em Python)
+    \item[Arquivos:] \texttt{main.c}, \texttt{avl.c}, \texttt{avl.h}, \texttt{rb.c}, \texttt{rb.h}, \texttt{analise.py}, \texttt{Makefile}, \texttt{requirements.txt}, \texttt{README.md}, \texttt{.gitignore}
+    \item[Commits:] \texttt{fcec72d}
+\end{description}
+}
+\textbf{Prompt literal:}
+\begin{registroia}
+\pendente{colar aqui a prompt literal que gerou o repositório (a transcrição dessa sessão não está nesta máquina).}
+\end{registroia}
+\textbf{Saída:}
+\begin{registroia}
+Commit fcec72d ("Estrutura inicial: AVL e Rubro-Negra com benchmark e análise"), com os arquivos main.c, avl.c, avl.h, rb.c, rb.h, analise.py, Makefile, requirements.txt, README.md e .gitignore. O código completo gerado está no histórico do repositório.
+\end{registroia}
+\textbf{Verificação humana:} \pendente{descrever o que foi conferido (ex.: leitura do código, execução de ./main validar, comparação com o CLRS), corrigido ou descartado.}
+
+\section*{Interação I2 (sessão S2, 23/11/2026)}
+\addcontentsline{toc}{section}{Interação I2}
+{\raggedright
+\begin{description}
+    \item[Ferramenta:] Claude Code, Claude Opus 5.5 (\texttt{claude-opus-5-5}), Anthropic
+    \item[Interface:] Claude Code 2.1.330, extensão do Visual Studio Code, executando no Ubuntu 26.04.1 LTS (WSL 2)
+    \item[Finalidade:] Estrutura do relatório em LaTeX (abnTeX2) e criação deste registro de uso de IA
+    \item[Arquivos:] \texttt{docs/relatorio.tex}, \texttt{docs/referencias.bib}, \texttt{docs/abntex2-alf.bst}, \texttt{docs/registro\_ia.toml}, \texttt{docs/gerar\_declaracao\_ia.py}, \texttt{CLAUDE.md}
+\end{description}
+}
+\textbf{Prompt literal:}
+\begin{registroia}
+Na Tree-benchmark, crie a pasta docs, vamos usar o latex da mesma forma que foi usado no Sorting Benchmark, nisso, adicione tambem um arquivo para guardar todas as prompts e metados afim de gerar uma declaração de uso de IA no relatório usando esse modelo aqui.
+
+1. O que registrar a cada uso \newline
+Item\quad{}Exemplo \newline
+Ferramenta e versão exata\quad{}Claude Sonnet 5.5 (claude-sonnet-5-5) \newline
+Empresa e interface\quad{}Anthropic, claude.ai (web) ou API \newline
+Data(s) de uso\quad{}23/11/2026 \newline
+Configurações relevantes\quad{}Busca na web ligada ou desligada, memória ou histórico de chats ligado, parâmetros (temperatura) se usou a API \newline
+Prompt literal\quad{}Texto completo, incluindo instruções de sistema ou de projeto, se houver \newline
+Saída\quad{}Resposta completa, ou a parte usada \newline
+Finalidade\quad{}Revisão de linguagem, síntese de literatura, código, análise de dados etc. \newline
+Verificação humana\quad{}O que você checou, corrigiu ou descartou
+
+Toda e qualquer prompt direcionada para o desenvolvimento do projeto precisa ser registrada a partir de agora, isso inclui a prompt que gerou o repositório.
+\end{registroia}
+\textbf{Saída:}
+\begin{registroia}
+Criou a pasta docs/ com: relatorio.tex (esqueleto do relatório técnico em abnTeX2, com o mesmo preâmbulo, formatação ABNT e organização em capítulos do relatório do Sorting-benchmark, conteúdo marcado como pendente); referencias.bib e abntex2-alf.bst (copiados e adaptados do Sorting-benchmark, com referências sobre AVL e Rubro-Negra); registro\_ia.toml (este registro); gerar\_declaracao\_ia.py (gera, a partir do registro, a seção de declaração de uso de IA e o apêndice com as prompts literais). Criou também o CLAUDE.md na raiz, instruindo as próximas sessões a registrarem cada prompt aqui.
+\end{registroia}
+\textbf{Verificação humana:} \pendente{descrever o que foi conferido, corrigido ou descartado.}
